@@ -31,21 +31,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             Check_Kotlin_Saveable_RememberTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val user = rememberWrapper()
-                    var count by remember{
-                        mutableIntStateOf(0)
-                    }
-                    Column {
-                        Greeting(
-                            user = user,
-                            onClick = {count += 1},
-                            modifier = Modifier.padding(innerPadding)
-                        )
-                        CountText(
-                            count = count
-                        )
-                    }
+                    var count by remember { mutableIntStateOf(0) }
+                    val user = rememberUser(name = "Taro")
 
+                    Column(modifier =  Modifier.padding(innerPadding)) {
+                        Text(text = "Hello ${user.name}!")
+                        Counter(count = count) {
+                            count++
+                        }
+                    }
                 }
             }
         }
@@ -53,63 +47,30 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(user: User,
-             modifier: Modifier = Modifier,
-             onClick: () -> Unit = {},) {
-    Column {
-        Text(
-            text = "Hello ${user.name}!",
-            modifier = modifier
-        )
-
-        Button(onClick = { onClick() }) {
-            Text("Change name")
-        }
+fun Counter(count:Int, onClick: () -> Unit) {
+    Text(text = "$count")
+    Button(onClick = { onClick() }) {
+        Text("Count Up")
     }
-}
-
-@Composable
-fun CountText(
-    count: Int = 0,
-    modifier: Modifier = Modifier,
-){
-    Text(
-        text = "Count: $count",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Check_Kotlin_Saveable_RememberTheme {
-        Greeting(User("Android"))
-    }
-}
-
-@Composable
-fun rememberWrapper(
-    lambda1: () -> Boolean = {true},
-    lambda2: () -> Boolean = {false},
-):User{
-    return rememberUser(lambda1, lambda2)
 }
 
 @Composable
 fun rememberUser(
+    name: String = "Taro",
     lambda1: () -> Boolean = {true},
-    lambda2: () -> Boolean = {false},
 ):User = rememberSaveable(
         lambda1,
-        lambda2,
+        name,
         saver = UserSaver,
 ){
     Log.i("rememberUser", "initialize User")
-    User()
+    User(
+        name = name,
+    )
 }
 
 data class User(
-    val name: String = ""
+    val name: String = "",
 )
 
 val UserSaver = Saver<User, String>(
