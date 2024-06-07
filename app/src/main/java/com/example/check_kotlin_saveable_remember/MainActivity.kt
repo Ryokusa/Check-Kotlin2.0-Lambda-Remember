@@ -2,6 +2,7 @@ package com.example.check_kotlin_saveable_remember
 
 import android.os.Bundle
 import android.os.UserManager
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -29,11 +30,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Check_Kotlin_Saveable_RememberTheme {
-                val user = rememberWrapper()
-                var count by remember{
-                    mutableIntStateOf(0)
-                }
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    val user = rememberWrapper()
+                    var count by remember{
+                        mutableIntStateOf(0)
+                    }
                     Column {
                         Greeting(
                             user = user,
@@ -103,6 +104,7 @@ fun rememberUser(
         lambda2,
         saver = UserSaver,
 ){
+    Log.i("rememberUser", "initialize User")
     User()
 }
 
