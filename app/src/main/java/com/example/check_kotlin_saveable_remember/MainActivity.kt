@@ -82,7 +82,7 @@ fun CountText(
 @Composable
 fun GreetingPreview() {
     Check_Kotlin_Saveable_RememberTheme {
-        Greeting(User("Android"), "")
+        Greeting(User("Android"))
     }
 }
 
